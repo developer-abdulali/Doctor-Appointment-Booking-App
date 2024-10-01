@@ -5,9 +5,12 @@ import "./index.css";
 import AdminContextProvider from "./context/AdminContext.jsx";
 import DoctorContextProvider from "./context/DoctorContext.jsx";
 import AppContextProvider from "./context/AppContext.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
+    <ToastContainer />
     <AdminContextProvider>
       <DoctorContextProvider>
         <AppContextProvider>
