@@ -16,3 +16,14 @@ export const changeDoctorAvailability = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+// get all doctors
+export const doctorsList = async (req, res) => {
+  try {
+    const doctors = await doctorModel.find({}).select(["-password", "-email"]);
+    return res.json({ success: true, doctors });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
