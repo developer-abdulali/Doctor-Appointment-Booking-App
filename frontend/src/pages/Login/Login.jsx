@@ -34,16 +34,16 @@ const Login = () => {
           email,
           password,
         });
-        if (data.success) {
-          localStorage.setItem("token", data.token);
-          setToken(data.token);
-          toast.success(data.message);
+        if (data?.success) {
+          localStorage.setItem("token", data?.token);
+          setToken(data?.token);
+          toast.success(data?.message);
         } else {
-          toast.error(data.message);
+          toast.error(data?.message);
         }
       }
     } catch (error) {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
 

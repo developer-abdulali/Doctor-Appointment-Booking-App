@@ -2,6 +2,9 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import { v2 as cloudinary } from "cloudinary";
+import doctorModel from "../models/doctorModel.js";
+import appointmentModel from "../models/appointmentModel.js";
 
 // regiter the user
 export const regiterUser = async (req, res) => {
@@ -100,7 +103,6 @@ export const loginUser = async (req, res) => {
 };
 
 // get user profile
-
 export const getUserProfile = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -109,6 +111,161 @@ export const getUserProfile = async (req, res) => {
       return res.json({ success: false, message: "User not found" });
     }
     res.json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+// update user profile
+export const updateUserProfile = async (req, res) => {
+  try {
+    const { userId, name, phone, address, gender, dob } = req.body;
+    const imageFile = req.file; // Single image upload, as you are using `upload.single`
+
+    // Check if any data is provided, i.e., at least one field to update
+    if (!name && !phone && !gender && !dob && !imageFile && !address) {
+      return res.json({
+        success: false,
+        message: "Please provide at least one field to update.",
+      });
+    }
+
+    // Object to hold fields to update
+    const updateFields = {};
+
+    // Add fields to update only if they are provided
+    if (name) updateFields.name = name;
+    if (phone) updateFields.phone = phone;
+    if (address) updateFields.address = JSON.parse(address);
+    if (dob) updateFields.dob = dob;
+    if (gender) updateFields.gender = gender;
+
+    // Update user with provided fields first
+    await userModel.findByIdAndUpdate(userId, updateFields);
+
+    // Handle image upload if a file is provided
+    if (imageFile) {
+      // Upload image to Cloudinary
+      const imgUpload = await cloudinary.uploader.upload(imageFile.path, {
+        resource_type: "image",
+      });
+      const imgUrl = imgUpload.secure_url;
+
+      // Update user's image field with the new image URL
+      await userModel.findByIdAndUpdate(userId, { image: imgUrl });
+    }
+
+    res.json({ success: true, message: "User profile updated successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+// book the appointment
+export const bookAppointment = async (req, res) => {
+  try {
+    const { userId, docId, slotDate, slotTime } = req.body;
+
+    const docData = await doctorModel.findById(docId).select("-password");
+
+    // check if doctor is available
+    if (!docData.available) {
+      return res.json({
+        success: false,
+        message: "Doctor is not available at this time",
+      });
+    }
+
+    let slots_booked = docData.slots_booked;
+
+    // checking for slots availability
+    if (slots_booked[slotDate]) {
+      if (slots_booked[slotDate].includes(slotTime)) {
+        return res.json({
+          success: false,
+          message: "Slot not available",
+        });
+      } else {
+        slots_booked[slotDate].push(slotTime);
+      }
+    } else {
+      slots_booked[slotDate] = [];
+      slots_booked[slotDate].push(slotTime);
+    }
+
+    const userData = await userModel.findById(userId).select("-password");
+
+    delete docData.slots_booked;
+
+    const appointmentData = {
+      userId,
+      docId,
+      userData,
+      docData,
+      amount: docData.fees,
+      slotTime,
+      slotDate,
+      date: Date.now(),
+    };
+
+    const newAppointment = await new appointmentModel(appointmentData);
+    newAppointment.save();
+
+    // update doctor slots_booked field
+    await doctorModel.findByIdAndUpdate(docId, { slots_booked });
+
+    res.json({ success: true, message: "Appointment booked successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+// get all booking appointments
+export const getAllBookedAppointments = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const appointments = await appointmentModel.find({ userId });
+
+    res.json({ success: true, appointments });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+// cancel the booked appointment
+export const cancelBookedAppointment = async (req, res) => {
+  try {
+    const { userId, appointmentId } = req.body;
+    const appointmentData = await appointmentModel.findById(appointmentId);
+
+    //verify appointment user
+    if (appointmentData.userId !== userId) {
+      return res.json({ success: false, message: "Unauthorized access" });
+    }
+
+    // remove appointment from database
+    await appointmentModel.findByIdAndDelete(appointmentId, {
+      cancelled: true,
+    });
+
+    // releasing doctor slot
+    const { docId, slotDate, slotTime } = appointmentData;
+
+    const doctorData = await doctorModel.findById(docId);
+
+    let slots_booked = doctorData.slots_booked;
+
+    slots_booked[slotDate] = slots_booked[slotDate].filter(
+      (time) => time !== slotTime
+    );
+
+    await doctorModel.findByIdAndUpdate(docId, { slots_booked });
+
+    res.json({ success: true, message: "Appointment cancelled successfully" });
   } catch (error) {
     console.log(error);
     return res.json({ success: false, message: error.message });
