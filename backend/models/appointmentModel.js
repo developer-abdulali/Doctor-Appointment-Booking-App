@@ -12,6 +12,14 @@ const appointmentSchema = new mongoose.Schema({
   cancelled: { type: Boolean, default: false },
   payment: { type: Boolean, default: false },
   isCompleted: { type: Boolean, default: false },
+
+  paymentMethod: {
+    type: String,
+    enum: ["Jazzcash", "Easypaisa", "Cash"],
+    default: null,
+  },
+  paymentProof: { type: String, default: null },
+  payment: { type: Boolean, default: false },
 });
 
 const appointmentModel =

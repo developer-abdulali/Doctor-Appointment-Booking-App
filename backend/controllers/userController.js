@@ -12,9 +12,9 @@ export const regiterUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     // validation
-    if (!name || !email || !password) {
-      return res.json({ success: false, message: "Please fill all fields" });
-    }
+    // if (!name || !email || !password) {
+    //   return res.json({ success: false, message: "Please fill all fields" });
+    // }
 
     // check if password is strong
     if (
@@ -266,6 +266,36 @@ export const cancelBookedAppointment = async (req, res) => {
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
 
     res.json({ success: true, message: "Appointment cancelled successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+export const makePayment = async (req, res) => {
+  try {
+    const { appointmentId, paymentMethod } = req.body;
+    const paymentProof = req.file ? req.file.path : null;
+
+    // Find the appointment by ID
+    const appointment = await appointmentModel.findById(appointmentId);
+
+    if (!appointment) {
+      return res.json({ success: false, message: "Appointment not found" });
+    }
+
+    // Check if the appointment is already paid
+    if (appointment.payment) {
+      return res.json({ success: false, message: "Appointment already paid" });
+    }
+
+    // Update the appointment with payment details
+    appointment.paymentMethod = paymentMethod;
+    appointment.paymentProof = paymentProof;
+    appointment.payment = true;
+    await appointment.save();
+
+    res.json({ success: true, message: "Payment successful" });
   } catch (error) {
     console.log(error);
     return res.json({ success: false, message: error.message });

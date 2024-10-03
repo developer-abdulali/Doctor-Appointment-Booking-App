@@ -7,6 +7,7 @@ export const AdminContext = createContext();
 
 const AdminContextProvider = (props) => {
   const [doctors, setDoctors] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [aToken, setAToken] = useState(
     localStorage.getItem("aToken") ? localStorage.getItem("aToken") : ""
   );
@@ -48,6 +49,22 @@ const AdminContextProvider = (props) => {
     }
   };
 
+  const getAllAppointments = async () => {
+    try {
+      const { data } = await axios.get(backendURL + "/admin/appointments", {
+        headers: { aToken },
+      });
+
+      if (data.success) {
+        setAppointments(data.appointments);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const value = {
     backendURL,
     aToken,
@@ -55,6 +72,9 @@ const AdminContextProvider = (props) => {
     doctors,
     getAllDoctors,
     changeAvailability,
+    appointments,
+    setAppointments,
+    getAllAppointments,
   };
 
   return (

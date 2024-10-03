@@ -95,9 +95,6 @@ const Appointment = () => {
 
     // Set the state once with all the collected slots
     setDocSlots(allTimeSlots);
-
-    // Debugging: Log the slots to verify
-    console.log(allTimeSlots);
   };
 
   // book appointment function

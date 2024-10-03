@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [state, setState] = useState("Login");
-  const [fullName, setFullName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -16,9 +16,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (state === "Sigup") {
+      if (state === "Signup") {
         const { data } = await axios.post(backendURL + "/user/register", {
-          fullName,
+          name,
           email,
           password,
         });
@@ -65,9 +65,9 @@ const Login = () => {
             <p>Full Name</p>
             <input
               type="text"
-              name="fullName"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="border border-zinc-300 rounded w-full p-2 mt-1"
             />
           </div>
