@@ -2,16 +2,20 @@ import { useContext, useState } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { DoctorContext } from "../../context/DoctorContext";
 
 const Login = () => {
   const [state, setState] = useState("Admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { setAToken, aToken, backendURL } = useContext(AdminContext);
+  const { setDToken, dToken } = useContext(DoctorContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when form submission starts
     try {
       if (state === "Admin") {
         const { data } = await axios.post(backendURL + "/admin/login", {
@@ -21,11 +25,28 @@ const Login = () => {
         if (data.success) {
           localStorage.setItem("aToken", data.token);
           setAToken(data.token);
+          toast.success("Logged in successfully!");
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const { data } = await axios.post(backendURL + "/doctor/login", {
+          email,
+          password,
+        });
+        console.log(data.token);
+        if (data?.success) {
+          localStorage.setItem("dToken", data?.token);
+          setDToken(data?.token);
         } else {
           toast.error(data.message);
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,7 +62,7 @@ const Login = () => {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="email"
+            placeholder="email@example.com"
             required
             className="border border-[#DADADA] rounded w-full p-2 mt-1"
           />
@@ -53,13 +74,17 @@ const Login = () => {
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="password"
+            placeholder="********"
             required
             className="border border-[#DADADA] rounded w-full p-2 mt-1"
           />
         </div>
-        <button className="bg-primary w-full py-2 rounded-md text-base text-white">
-          Login
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-primary w-full py-2 rounded-md text-base text-white flex items-center justify-center transition-all hover:duration-500 hover:bg-primary/90"
+        >
+          {loading ? <span className="loader mr-2"></span> : "Login"}
         </button>
         {state === "Admin" ? (
           <p>
@@ -86,4 +111,5 @@ const Login = () => {
     </form>
   );
 };
+
 export default Login;

@@ -10,6 +10,8 @@
 //   const [isModalOpen, setIsModalOpen] = useState(false);
 //   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
 
+//   console.log(appointments);
+
 //   const months = [
 //     "",
 //     "Jan",
@@ -82,7 +84,7 @@
 
 //   const handlePaymentSuccess = (paymentMethod) => {
 //     toast.success(`Payment via ${paymentMethod} successful!`);
-//     // Here you can also add additional logic to handle the payment, like updating the appointment status
+//     getUserAppointments(); // Refresh the appointments list
 //   };
 
 //   return (
@@ -90,11 +92,11 @@
 //       <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">
 //         My appointments
 //       </p>
-
-//       {appointments.length > 0 ? (
+//       {console.log(appointments)}
+//       {appointments?.length > 0 ? (
 //         <div>
 //           {appointments.map((item, i) => {
-//             const address = JSON.parse(item?.docData?.address || "{}");
+//             const address = item?.docData?.address; // No need to parse it
 
 //             return (
 //               <div
@@ -124,12 +126,22 @@
 //                   </p>
 //                 </div>
 //                 <div className="flex flex-col gap-2 justify-end">
-//                   <button
-//                     onClick={() => openPaymentModal(item?._id)}
-//                     className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300"
-//                   >
-//                     Pay Online
-//                   </button>
+//                   {item.paymentMethod === "Cash" ? (
+//                     <p className="text-sm text-yellow-600 text-center sm:min-w-48 py-2 border rounded">
+//                       Will pay in cash
+//                     </p>
+//                   ) : item.payment ? (
+//                     <p className="text-sm text-green-600 text-center sm:min-w-48 py-2 border rounded">
+//                       Paid via {item.paymentMethod}
+//                     </p>
+//                   ) : (
+//                     <button
+//                       onClick={() => openPaymentModal(item?._id)}
+//                       className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300"
+//                     >
+//                       Pay Online
+//                     </button>
+//                   )}
 //                   {!item?.cancelled && (
 //                     <button
 //                       onClick={() => cancelBookedAppointment(item?._id)}
@@ -171,6 +183,8 @@ const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+
+  console.log(appointments);
 
   const months = [
     "",
@@ -252,11 +266,11 @@ const MyAppointments = () => {
       <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">
         My appointments
       </p>
-
-      {appointments.length > 0 ? (
+      {console.log(appointments)}
+      {appointments?.length > 0 ? (
         <div>
           {appointments.map((item, i) => {
-            const address = JSON.parse(item?.docData?.address || "{}");
+            const address = item?.docData?.address;
 
             return (
               <div
@@ -302,13 +316,21 @@ const MyAppointments = () => {
                       Pay Online
                     </button>
                   )}
-                  {!item?.cancelled && (
-                    <button
-                      onClick={() => cancelBookedAppointment(item?._id)}
-                      className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300"
-                    >
-                      Cancel appointment
-                    </button>
+
+                  {/* Check if the appointment is completed */}
+                  {item?.isCompleted ? (
+                    <p className="text-sm text-green-600 text-center sm:min-w-48 py-2 border rounded">
+                      Appointment completed
+                    </p>
+                  ) : (
+                    !item?.cancelled && (
+                      <button
+                        onClick={() => cancelBookedAppointment(item?._id)}
+                        className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300"
+                      >
+                        Cancel appointment
+                      </button>
+                    )
                   )}
                 </div>
               </div>

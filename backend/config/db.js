@@ -10,15 +10,13 @@ const connectDB = async () => {
       console.error("Database connection error:", err)
     );
 
-    // Use the environment variable directly without appending `/prescripto`
+    // Use the environment variable directly and specify the database name
     await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      dbName: "prescripto", // Specify database name here
+      dbName: "prescripto", // Specify the database name here
     });
   } catch (error) {
     console.error("Database connection failed:", error.message);
-    process.exit(1);
+    process.exit(1); // Exit the process if connection fails
   }
 };
 

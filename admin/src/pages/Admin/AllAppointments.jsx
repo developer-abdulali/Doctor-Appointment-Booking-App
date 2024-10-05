@@ -2,16 +2,12 @@ import { useContext } from "react";
 import { AdminContext } from "../../context/AdminContext";
 import { useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
+import { assets } from "../../assets/assets";
 
 const AllAppointments = () => {
-  const {
-    aToken,
-    backendURL,
-    appointments,
-    setAppointments,
-    getAllAppointments,
-  } = useContext(AdminContext);
-  const { calculateAge } = useContext(AppContext);
+  const { aToken, appointments, cancelAppointments, getAllAppointments } =
+    useContext(AdminContext);
+  const { calculateAge, slotDateFormat } = useContext(AppContext);
 
   useEffect(() => {
     if (aToken) {
@@ -47,6 +43,30 @@ const AllAppointments = () => {
               <p>{item?.userData?.name}</p>
             </div>
             <p className="max-sm:hidden">{calculateAge(item?.userData?.dob)}</p>
+            <p>
+              {slotDateFormat(item?.slotDate)} | {item?.slotTime}
+            </p>
+            <div className="flex items-center gap-2">
+              <img
+                src={item?.docData?.image}
+                alt="patient img"
+                className="w-8 rounded-full bg-gray-200"
+              />{" "}
+              <p>{item?.docData?.name}</p>
+            </div>
+            <p>${item?.amount}</p>
+            {item?.cancelled ? (
+              <p className="text-red-400 text-xs font-medium">Cancelled</p>
+            ) : item?.isCompleted ? (
+              <p className="text-green-500 text-xs font-medium">Completed</p>
+            ) : (
+              <img
+                onClick={() => cancelAppointments(item?._id)}
+                src={assets.cancel_icon}
+                alt="cancel_icon"
+                className="w-10 cursor-pointer"
+              />
+            )}
           </div>
         ))}
       </div>

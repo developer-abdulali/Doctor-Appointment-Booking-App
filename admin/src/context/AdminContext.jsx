@@ -7,6 +7,7 @@ export const AdminContext = createContext();
 
 const AdminContextProvider = (props) => {
   const [doctors, setDoctors] = useState([]);
+  const [dashboardData, setDashboardData] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [aToken, setAToken] = useState(
     localStorage.getItem("aToken") ? localStorage.getItem("aToken") : ""
@@ -65,6 +66,66 @@ const AdminContextProvider = (props) => {
     }
   };
 
+  const cancelAppointments = async (appointmentId) => {
+    try {
+      const { data } = await axios.post(
+        backendURL + "/admin/cancel-appointment",
+        { appointmentId },
+        {
+          headers: { aToken },
+        }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        getAllAppointments();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const getDashboardData = async () => {
+    try {
+      const { data } = await axios.get(backendURL + "/admin/dashboard", {
+        headers: { aToken },
+      });
+
+      if (data.success) {
+        setDashboardData(data.dashboardData);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const months = [
+    "",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const slotDateFormat = (slotDate) => {
+    const dateArray = slotDate.split("_");
+    return (
+      dateArray[0] + " " + months[Number(dateArray[1])] + " " + dateArray[2]
+    );
+  };
+
   const value = {
     backendURL,
     aToken,
@@ -75,6 +136,10 @@ const AdminContextProvider = (props) => {
     appointments,
     setAppointments,
     getAllAppointments,
+    cancelAppointments,
+    dashboardData,
+    getDashboardData,
+    slotDateFormat,
   };
 
   return (

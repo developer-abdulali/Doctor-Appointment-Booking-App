@@ -62,7 +62,11 @@ export const regiterUser = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     // return success message and token
-    res.json({ success: true, message: "User registered successfully", token });
+    return res.json({
+      success: true,
+      message: "User registered successfully",
+      token,
+    });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -95,10 +99,14 @@ export const loginUser = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     // return success message and token
-    res.json({ success: true, message: "User logged in successfully", token });
+    return res.json({
+      success: true,
+      message: "User logged in successfully",
+      token,
+    });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
