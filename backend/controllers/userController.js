@@ -128,11 +128,19 @@ export const getUserProfile = async (req, res) => {
 // update user profile
 export const updateUserProfile = async (req, res) => {
   try {
-    const { userId, name, phone, address, gender, dob } = req.body;
+    const { userId, email, name, phone, address, gender, dob } = req.body;
     const imageFile = req.file; // Single image upload, as you are using `upload.single`
 
     // Check if any data is provided, i.e., at least one field to update
-    if (!name && !phone && !gender && !dob && !imageFile && !address) {
+    if (
+      !name &&
+      !phone &&
+      !email &&
+      !gender &&
+      !dob &&
+      !imageFile &&
+      !address
+    ) {
       return res.json({
         success: false,
         message: "Please provide at least one field to update.",
@@ -144,6 +152,7 @@ export const updateUserProfile = async (req, res) => {
 
     // Add fields to update only if they are provided
     if (name) updateFields.name = name;
+    if (email) updateFields.email = email;
     if (phone) updateFields.phone = phone;
     if (address) updateFields.address = JSON.parse(address);
     if (dob) updateFields.dob = dob;

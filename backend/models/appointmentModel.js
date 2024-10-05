@@ -15,7 +15,7 @@ const appointmentSchema = new mongoose.Schema({
 
   paymentMethod: {
     type: String,
-    enum: ["Jazzcash", "Easypaisa", "Cash"],
+    enum: ["JazzCash", "Easypaisa", "Cash"],
     default: null,
   },
   paymentProof: { type: String, default: null },

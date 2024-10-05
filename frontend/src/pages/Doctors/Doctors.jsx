@@ -1,12 +1,14 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
+import { CiFilter } from "react-icons/ci";
 
 const Doctors = () => {
   const navigate = useNavigate();
   const { speciality } = useParams();
   const { doctors } = useContext(AppContext);
   const [filterDoc, setFilterDoc] = useState([]);
+  const [showSpecialities, setShowSpecialities] = useState(false);
 
   const applyFilter = () => {
     if (speciality) {
@@ -27,13 +29,35 @@ const Doctors = () => {
     applyFilter();
   }, [doctors, speciality]);
 
-  return (
-    <section className="max-w-7xl mx-auto p-6">
-      <p className="text-gray-700 text-xl mb-6">Browse Doctors by Speciality</p>
+  const handleSpecialitySelect = (specialityName) => {
+    setShowSpecialities(false); // Close specialities on selection
+    if (speciality === specialityName) {
+      navigate("/doctors");
+    } else {
+      navigate(`/doctors/${specialityName}`);
+    }
+  };
 
-      <div className="flex flex-col sm:flex-row items-start gap-8">
-        {/* Sidebar for Specialities */}
-        <div className="flex flex-col gap-4 w-full sm:w-1/3 lg:w-1/4">
+  return (
+    <section className="max-w-7xl mx-auto md:p-6">
+      {/* Mobile Structure with Filter Button */}
+      <div className="sm:hidden mb-4 flex items-center justify-between">
+        <p className="text-gray-700 text-md md:text-xl">
+          Browse Doctors by Speciality
+        </p>
+        <button
+          onClick={() => setShowSpecialities((prev) => !prev)}
+          className="mt-2 p-2 border border-blue-500 text-blue-500 rounded-lg"
+        >
+          {/* <CiFilter /> */}
+
+          {showSpecialities ? <CiFilter /> : <CiFilter />}
+        </button>
+      </div>
+
+      {/* Sidebar for Specialities (Visible on larger screens and conditionally on small screens) */}
+      {showSpecialities && (
+        <div className="flex flex-col gap-4 mb-4 sm:hidden">
           {[
             "General physician",
             "Gynecologist",
@@ -44,11 +68,37 @@ const Doctors = () => {
           ].map((specialityName) => (
             <p
               key={specialityName}
-              onClick={() =>
+              onClick={() => handleSpecialitySelect(specialityName)} // Use the handler here
+              className={`pl-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-blue-100 cursor-pointer transition-all duration-300 ${
                 speciality === specialityName
-                  ? navigate("/doctors")
-                  : navigate(`/doctors/${specialityName}`)
-              }
+                  ? "bg-blue-100 font-medium text-blue-600"
+                  : "text-gray-700"
+              }`}
+            >
+              {specialityName}
+            </p>
+          ))}
+        </div>
+      )}
+
+      <p className="text-gray-700 text-xl mb-6 hidden sm:block">
+        Browse Doctors by Speciality
+      </p>
+
+      <div className="flex flex-col sm:flex-row items-start gap-8">
+        {/* Sidebar for Specialities (Visible on larger screens) */}
+        <div className="hidden sm:flex flex-col gap-4 w-full sm:w-1/3 lg:w-1/4">
+          {[
+            "General physician",
+            "Gynecologist",
+            "Dermatologist",
+            "Pediatricians",
+            "Neurologist",
+            "Gastroenterologist",
+          ].map((specialityName) => (
+            <p
+              key={specialityName}
+              onClick={() => handleSpecialitySelect(specialityName)} // Use the handler here
               className={`pl-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-blue-100 cursor-pointer transition-all duration-300 ${
                 speciality === specialityName
                   ? "bg-blue-100 font-medium text-blue-600"

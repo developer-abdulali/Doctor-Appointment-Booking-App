@@ -14,7 +14,7 @@ const Sidebar = () => {
       {aToken ? (
         <ul className="mt-5 text-[#515151]">
           <NavLink
-            to="/admin-dashboard"
+            to="/"
             className={({ isActive }) =>
               `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
                 isActive ? "bg-[#F2F3FF] border-r-4 border-primary" : ""
@@ -25,7 +25,7 @@ const Sidebar = () => {
             <p>Dashboard</p>
           </NavLink>
           <NavLink
-            to="/all-appointments"
+            to="/"
             className={({ isActive }) =>
               `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
                 isActive ? "bg-[#F2F3FF] border-r-4 border-primary" : ""
@@ -62,7 +62,7 @@ const Sidebar = () => {
         // Show doctor routes if dToken is available and no admin is logged in
         <ul className="mt-5 text-[#515151]">
           <NavLink
-            to="/doctor-dashboard"
+            to="/"
             className={({ isActive }) =>
               `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${
                 isActive ? "bg-[#F2F3FF] border-r-4 border-primary" : ""

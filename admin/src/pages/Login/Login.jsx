@@ -3,12 +3,14 @@ import { AdminContext } from "../../context/AdminContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { DoctorContext } from "../../context/DoctorContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [state, setState] = useState("Admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to track password visibility
 
   const { setAToken, aToken, backendURL } = useContext(AdminContext);
   const { setDToken, dToken } = useContext(DoctorContext);
@@ -34,7 +36,6 @@ const Login = () => {
           email,
           password,
         });
-        console.log(data.token);
         if (data?.success) {
           localStorage.setItem("dToken", data?.token);
           setDToken(data?.token);
@@ -67,10 +68,10 @@ const Login = () => {
             className="border border-[#DADADA] rounded w-full p-2 mt-1"
           />
         </div>
-        <div className="w-full">
+        <div className="w-full relative">
           <p>Password</p>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -78,6 +79,12 @@ const Login = () => {
             required
             className="border border-[#DADADA] rounded w-full p-2 mt-1"
           />
+          <span
+            className="absolute right-3 top-9 cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
         </div>
         <button
           type="submit"

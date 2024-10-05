@@ -36,6 +36,8 @@ import General_physician from "./General_physician.svg";
 import Gynecologist from "./Gynecologist.svg";
 import Neurologist from "./Neurologist.svg";
 import Pediatricians from "./Pediatricians.svg";
+import easypaisa_icon from "./easypaisa.png";
+import jazzcash_icon from "./jazzCashLogo.png";
 
 export const assets = {
   appointment_img,
@@ -55,6 +57,29 @@ export const assets = {
   upload_icon,
   stripe_logo,
   razorpay_logo,
+  easypaisa_icon,
+  jazzcash_icon,
+  doc1,
+  doc2,
+  doc3,
+  doc4,
+  doc5,
+  doc6,
+  doc7,
+  doc8,
+  doc9,
+  doc10,
+  doc11,
+  doc12,
+  doc13,
+  doc14,
+  doc15,
+  Dermatologist,
+  Gastroenterologist,
+  General_physician,
+  Gynecologist,
+  Neurologist,
+  Pediatricians,
 };
 
 export const specialityData = [

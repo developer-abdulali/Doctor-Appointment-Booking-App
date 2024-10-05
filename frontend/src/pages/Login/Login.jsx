@@ -3,12 +3,14 @@ import { AppContext } from "../../context/AppContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [state, setState] = useState("Login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const { token, setToken, backendURL } = useContext(AppContext);
@@ -43,7 +45,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      toast.error(data?.message);
+      toast.error(error?.response?.data?.message || "An error occurred");
     }
   };
 
@@ -51,7 +53,7 @@ const Login = () => {
     if (token) {
       navigate("/");
     }
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <form onSubmit={handleSubmit} className="min-h-[80vh] flex items-center">
@@ -82,15 +84,21 @@ const Login = () => {
             className="border border-zinc-300 rounded w-full p-2 mt-1"
           />
         </div>
-        <div className="w-full">
+        <div className="w-full relative">
           <p>Password</p>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="border border-zinc-300 rounded w-full p-2 mt-1"
           />
+          <span
+            className="absolute right-3 top-9 cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
         </div>
         <button
           type="submit"
@@ -105,7 +113,7 @@ const Login = () => {
               onClick={() => setState("Login")}
               className="text-primary underline cursor-pointer"
             >
-              login here
+              Login here
             </span>
           </p>
         ) : (
@@ -124,4 +132,5 @@ const Login = () => {
     </form>
   );
 };
+
 export default Login;
