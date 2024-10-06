@@ -21,11 +21,13 @@ const Dashboard = () => {
 
   return (
     dashboardData && (
-      <section className="m-5">
-        <div className="flex flex-wrap gap-3">
+      <section className="p-5 w-full">
+        {/* Responsive Grid for the Dashboard Cards */}
+        {/* <div className="flex flex-wrap"> */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
           <div
             onClick={() => navigate("/doctor-list")}
-            className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all"
+            className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full"
           >
             <img src={assets.doctor_icon} alt="doctor_icon" className="w-14" />
             <div>
@@ -38,7 +40,7 @@ const Dashboard = () => {
 
           <div
             onClick={() => navigate("/all-appointments")}
-            className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all"
+            className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full"
           >
             <img
               src={assets.appointments_icon}
@@ -53,7 +55,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
+          <div className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full">
             <img
               src={assets.patients_icon}
               alt="patients_icon"
@@ -68,19 +70,20 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white">
-          <div className="flex items-center gap-2.5 px-4 py-2 mt-10 rounded-t border">
+        {/* Latest Bookings Section */}
+        <div className="bg-white mt-8 rounded-lg shadow">
+          <div className="flex items-center gap-2.5 px-4 py-2 rounded-t border">
             <img src={assets.list_icon} alt="list_icon" />
             <p className="font-semibold">Latest Bookings</p>
           </div>
         </div>
 
-        <div className="p-4 border border-t-0">
+        <div className="bg-white py-2 border border-t-0 rounded-b">
           {dashboardData?.latestAppointments?.length > 0 ? (
             dashboardData?.latestAppointments?.map((item, i) => (
               <div
                 key={i}
-                className="flex items-center px-6 py-3 gap-3 hover:bg-gray-100"
+                className="px-4 lg:px-10 flex items-center py-3 gap-3 hover:bg-gray-100 flex-wrap sm:flex-nowrap"
               >
                 <img
                   src={item?.docData?.image}

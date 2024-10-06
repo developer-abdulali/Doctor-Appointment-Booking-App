@@ -12,14 +12,15 @@ const DoctorsList = () => {
   }, [aToken]);
 
   return (
-    <section className="m-5 max-h-[90vh] overflow-y-scroll">
+    <section className="m-5 max-h-[90vh] overflow-y-scroll mb-20 md:mb-5">
       <h1 className="text-lg font-medium">All Doctors</h1>
       <div className="w-full flex flex-wrap gap-4 pt-5 gap-y-6">
+        {/* <div className="w-full flex flex-wrap gap-4 pt-5 gap-y-6"> */}
         {doctors.map((doctor, i) => (
           <div
             key={i}
-            className="border border-indigo-200 rounded-xl max-w-56 overflow-hidden cursor-pointer
-         group"
+            className="border border-indigo-200 sm:max-w-56 rounded-xl overflow-hidden cursor-pointer group"
+            // className="border border-indigo-200 md:max-w-56 rounded-xl overflow-hidden cursor-pointer group"
           >
             <img
               src={doctor.image}

@@ -44,7 +44,7 @@ export const doctorLogin = async (req, res) => {
     // check if email already exists
     const doctor = await doctorModel.findOne({ email });
     if (!doctor) {
-      return res.json({ success: false, message: "Doctor doest not" });
+      return res.json({ success: false, message: "Doctor doest not found" });
     }
 
     // validate the password

@@ -10,14 +10,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State to track password visibility
-
-  const { setAToken, aToken, backendURL } = useContext(AdminContext);
-  const { setDToken, dToken } = useContext(DoctorContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const { setAToken, backendURL } = useContext(AdminContext);
+  const { setDToken } = useContext(DoctorContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when form submission starts
+    setLoading(true);
     try {
       if (state === "Admin") {
         const { data } = await axios.post(backendURL + "/admin/login", {
@@ -51,36 +50,45 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="min-h-[80vh] flex items-center">
-      <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-[#5E5E5E] text-sm shadow-lg">
-        <p className="text-2xl font-semibold m-auto">
+    <form
+      onSubmit={handleSubmit}
+      className="min-h-screen flex items-center justify-center px-4 sm:px-0"
+    >
+      <div className="flex flex-col gap-4 bg-white shadow-xl rounded-lg p-6 sm:p-8 max-w-sm w-full">
+        <p className="text-2xl font-semibold text-center">
           <span className="text-primary">{state}</span> Login
         </p>
         <div className="w-full">
-          <p>Email</p>
+          <label htmlFor="email" className="text-gray-700">
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="email@example.com"
             required
-            className="border border-[#DADADA] rounded w-full p-2 mt-1"
+            className="border border-zinc-300 rounded w-full p-2 mt-1"
           />
         </div>
         <div className="w-full relative">
-          <p>Password</p>
+          <label htmlFor="password" className="text-gray-700">
+            Password
+          </label>
           <input
+            id="password"
             type={showPassword ? "text" : "password"}
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="********"
             required
-            className="border border-[#DADADA] rounded w-full p-2 mt-1"
+            className="border border-zinc-300 rounded w-full p-2 mt-1"
           />
           <span
-            className="absolute right-3 top-9 cursor-pointer"
+            className="absolute right-3 top-10 text-gray-500 cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -89,12 +97,16 @@ const Login = () => {
         <button
           type="submit"
           disabled={loading}
-          className="bg-primary w-full py-2 rounded-md text-base text-white flex items-center justify-center transition-all hover:duration-500 hover:bg-primary/90"
+          className="bg-primary w-full py-3 rounded-md text-white font-semibold flex items-center justify-center transition-all hover:bg-primary/90"
         >
-          {loading ? <span className="loader mr-2"></span> : "Login"}
+          {loading ? (
+            <span className="loader border-2 border-white border-t-transparent rounded-full w-5 h-5 mr-2"></span>
+          ) : (
+            "Login"
+          )}
         </button>
         {state === "Admin" ? (
-          <p>
+          <p className="text-sm text-gray-600 text-center">
             Doctor Login?{" "}
             <span
               onClick={() => setState("Doctor")}
@@ -104,7 +116,7 @@ const Login = () => {
             </span>
           </p>
         ) : (
-          <p>
+          <p className="text-sm text-gray-600 text-center">
             Admin Login?{" "}
             <span
               onClick={() => setState("Admin")}

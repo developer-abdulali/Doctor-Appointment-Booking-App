@@ -1,156 +1,16 @@
-// import { useContext, useEffect } from "react";
-// import { DoctorContext } from "../../context/DoctorContext";
-// import { useNavigate } from "react-router-dom";
-// import { assets } from "../../assets/assets";
-
-// const DoctorDashboard = () => {
-//   const navigate = useNavigate();
-//   const {
-//     dToken,
-//     slotDateFormat,
-//     dashboardData,
-//     getDoctorDashboardData,
-//     completeAppointment,
-//     cancelAppointment,
-//   } = useContext(DoctorContext);
-
-//   useEffect(() => {
-//     if (dToken) {
-//       getDoctorDashboardData();
-//     }
-//   }, [dToken]);
-
-//   return (
-//     dashboardData && (
-//       <section className="m-5">
-//         <div className="flex flex-wrap gap-3">
-//           <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-//             <img
-//               src={assets.earning_icon}
-//               alt="earning_icon"
-//               className="w-14"
-//             />
-//             <div>
-//               <p className="text-xl font-semibold text-gray-600">
-//                 {dashboardData?.earnings}
-//               </p>
-//               <p className="text-gray-400">Earnings</p>
-//             </div>
-//           </div>
-
-//           <div
-//             onClick={() => navigate("/doctor-appointments")}
-//             className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all"
-//           >
-//             <img
-//               src={assets.appointments_icon}
-//               alt="appointments_icon"
-//               className="w-14"
-//             />
-//             <div>
-//               <p className="text-xl font-semibold text-gray-600">
-//                 {dashboardData?.appointments}
-//               </p>
-//               <p className="text-gray-400">Appointments</p>
-//             </div>
-//           </div>
-
-//           <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-//             <img
-//               src={assets.patients_icon}
-//               alt="patients_icon"
-//               className="w-14"
-//             />
-//             <div>
-//               <p className="text-xl font-semibold text-gray-600">
-//                 {dashboardData?.patients}
-//               </p>
-//               <p className="text-gray-400">Patients</p>
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="bg-white">
-//           <div className="flex items-center gap-2.5 px-4 py-2 mt-10 rounded-t border">
-//             <img src={assets.list_icon} alt="list_icon" />
-//             <p className="font-semibold">Latest Bookings</p>
-//           </div>
-//         </div>
-
-//         <div className="p-4 border border-t-0">
-//           {dashboardData?.latestAppointments?.length > 0 ? (
-//             dashboardData?.latestAppointments?.map((item, i) => (
-//               <div
-//                 key={i}
-//                 className="flex items-center px-6 py-3 gap-3 hover:bg-gray-100"
-//               >
-//                 <img
-//                   src={item?.userData?.image}
-//                   alt="user"
-//                   className="rounded-full w-10"
-//                 />
-//                 <div className="flex-1 text-sm">
-//                   <p className="text-gray-800 font-medium">
-//                     {item?.userData?.name}
-//                   </p>
-//                   <p className="text-gray-600">
-//                     {slotDateFormat(item?.slotDate)}
-//                   </p>
-//                 </div>
-//                 {item?.cancelled ? (
-//                   <p className="text-red-500 text-xs font-medium">Cancelled</p>
-//                 ) : item?.isCompleted ? (
-//                   <p className="text-green-500 text-xs font-medium">
-//                     Completed
-//                   </p>
-//                 ) : (
-//                   <div className="flex items-center gap-1">
-//                     <img
-//                       onClick={() => {
-//                         cancelAppointment(item?._id);
-//                         getDoctorDashboardData();
-//                       }}
-//                       src={assets.cancel_icon}
-//                       alt="cancel_icon"
-//                       className="w-10 cursor-pointer"
-//                     />
-//                     <img
-//                       onClick={() => {
-//                         completeAppointment(item?._id)
-//                         getDoctorDashboardData();
-//                       }}
-//                       src={assets.tick_icon}
-//                       alt="tick_icon"
-//                       className="w-10 cursor-pointer"
-//                     />
-//                   </div>
-//                 )}
-//               </div>
-//             ))
-//           ) : (
-//             <p className="text-gray-500 text-sm text-center py-4">
-//               No recent bookings.
-//             </p>
-//           )}
-//         </div>
-//       </section>
-//     )
-//   );
-// };
-// export default DoctorDashboard;
-
 import { useContext, useEffect } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
-import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 
-const DoctorDashboard = () => {
-  const navigate = useNavigate();
+const DoctorAppointments = () => {
   const {
     dToken,
-    slotDateFormat,
-    dashboardData,
+    appointments,
+    getAppointments,
     getDoctorDashboardData,
+    dashboardData,
+    calculateAge,
+    slotDateFormat,
     completeAppointment,
     cancelAppointment,
   } = useContext(DoctorContext);
@@ -158,131 +18,162 @@ const DoctorDashboard = () => {
   useEffect(() => {
     if (dToken) {
       getDoctorDashboardData();
+      getAppointments();
     }
   }, [dToken]);
 
   const handleCancelAppointment = (appointmentId) => {
     cancelAppointment(appointmentId, () => {
-      getDoctorDashboardData();
+      getAppointments();
     });
   };
 
   const handleCompleteAppointment = (appointmentId) => {
     completeAppointment(appointmentId, () => {
-      getDoctorDashboardData();
+      getAppointments();
     });
   };
 
   return (
-    dashboardData && (
-      <section className="m-5">
-        <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-            <img
-              src={assets.earning_icon}
-              alt="earning_icon"
-              className="w-14"
-            />
-            <div>
-              <p className="text-xl font-semibold text-gray-600">
-                {dashboardData?.earnings}
-              </p>
-              <p className="text-gray-400">Earnings</p>
-            </div>
-          </div>
-
-          <div
-            onClick={() => navigate("/doctor-appointments")}
-            className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all"
-          >
-            <img
-              src={assets.appointments_icon}
-              alt="appointments_icon"
-              className="w-14"
-            />
-            <div>
-              <p className="text-xl font-semibold text-gray-600">
-                {dashboardData?.appointments}
-              </p>
-              <p className="text-gray-400">Appointments</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-            <img
-              src={assets.patients_icon}
-              alt="patients_icon"
-              className="w-14"
-            />
-            <div>
-              <p className="text-xl font-semibold text-gray-600">
-                {dashboardData?.patients}
-              </p>
-              <p className="text-gray-400">Patients</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white">
-          <div className="flex items-center gap-2.5 px-4 py-2 mt-10 rounded-t border">
-            <img src={assets.list_icon} alt="list_icon" />
-            <p className="font-semibold">Latest Bookings</p>
-          </div>
-        </div>
-
-        <div className="p-4 border border-t-0">
-          {dashboardData?.latestAppointments?.length > 0 ? (
-            dashboardData?.latestAppointments?.map((item, i) => (
-              <div
-                key={i}
-                className="flex items-center px-6 py-3 gap-3 hover:bg-gray-100"
-              >
-                <img
-                  src={item?.userData?.image}
-                  alt="user"
-                  className="rounded-full w-10"
-                />
-                <div className="flex-1 text-sm">
-                  <p className="text-gray-800 font-medium">
-                    {item?.userData?.name}
-                  </p>
-                  <p className="text-gray-600">
-                    {slotDateFormat(item?.slotDate)}
-                  </p>
-                </div>
-                {item?.cancelled ? (
-                  <p className="text-red-500 text-xs font-medium">Cancelled</p>
-                ) : item?.isCompleted ? (
-                  <p className="text-green-500 text-xs font-medium">
-                    Completed
-                  </p>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <img
-                      onClick={() => handleCancelAppointment(item?._id)}
-                      src={assets.cancel_icon}
-                      alt="cancel_icon"
-                      className="w-10 cursor-pointer"
-                    />
-                    <img
-                      onClick={() => handleCompleteAppointment(item?._id)}
-                      src={assets.tick_icon}
-                      alt="tick_icon"
-                      className="w-10 cursor-pointer"
-                    />
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500 text-sm text-center py-4">
-              No recent bookings.
+    <section className="w-full p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
+        <div
+          onClick={() => navigate("/doctor-list")}
+          className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full"
+        >
+          <img src={assets.earning_icon} alt="doctor_icon" className="w-14" />
+          <div>
+            <p className="text-xl font-semibold text-gray-600">
+              {dashboardData?.earnings}
             </p>
-          )}
+            <p className="text-gray-400">Earnings</p>
+          </div>
         </div>
-      </section>
-    )
+
+        <div
+          onClick={() => navigate("/all-appointments")}
+          className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full"
+        >
+          <img
+            src={assets.appointments_icon}
+            alt="appointments_icon"
+            className="w-14"
+          />
+          <div>
+            <p className="text-xl font-semibold text-gray-600">
+              {dashboardData?.appointments}
+            </p>
+            <p className="text-gray-400">Appointments</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full">
+          <img
+            src={assets.patients_icon}
+            alt="patients_icon"
+            className="w-14"
+          />
+          <div>
+            <p className="text-xl font-semibold text-gray-600">
+              {dashboardData?.patients}
+            </p>
+            <p className="text-gray-400">Patients</p>
+          </div>
+        </div>
+      </div>
+
+      <p className="mb-3 text-xl font-semibold">All Appointments</p>
+      <div className="bg-white border rounded shadow-sm overflow-x-auto">
+        {/* Table header */}
+        <table className="min-w-full">
+          <thead className="bg-gray-100 text-gray-700">
+            <tr>
+              <th className="py-3 px-6 text-left">#</th>
+              <th className="py-3 px-6 text-left">Patient</th>
+              <th className="py-3 px-6 text-left">Age</th>
+              <th className="py-3 px-6 text-left">Date & Time</th>
+              <th className="py-3 px-6 text-left">Doctor</th>
+              <th className="py-3 px-6 text-left">Fees</th>
+              <th className="py-3 px-6 text-left">Payment</th>
+              <th className="py-3 px-6 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Show message if no appointments */}
+            {appointments.length === 0 ? (
+              <tr>
+                <td colSpan="8" className="text-center py-5 text-gray-500">
+                  No appointments
+                </td>
+              </tr>
+            ) : (
+              appointments.reverse().map((item, i) => (
+                <tr key={i} className="hover:bg-gray-50">
+                  <td className="py-3 px-6 hidden sm:table-cell">{i + 1}</td>
+                  <td className="py-3 px-6">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={item?.userData?.image}
+                        alt="patient img"
+                        className="w-8 h-8 rounded-full"
+                      />
+                      <span>{item?.userData?.name}</span>
+                    </div>
+                  </td>
+                  <td className="py-3 px-6 hidden sm:table-cell">
+                    {calculateAge(item?.userData?.dob)}
+                  </td>
+                  <td className="py-3 px-6">
+                    {slotDateFormat(item?.slotDate)} | {item?.slotTime}
+                  </td>
+                  <td className="py-3 px-6">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={item?.docData?.image}
+                        alt="doctor img"
+                        className="w-8 h-8 rounded-full bg-gray-200"
+                      />
+                      <span>{item?.docData?.name}</span>
+                    </div>
+                  </td>
+                  <td className="py-3 px-6">${item?.amount}</td>
+                  <td className="py-3 px-6">
+                    {item?.payment ? item?.paymentMethod : "Not Paid"}
+                  </td>
+                  <td className="py-3 px-6">
+                    {item?.cancelled ? (
+                      <span className="text-red-500 text-xs font-medium">
+                        Cancelled
+                      </span>
+                    ) : item?.isCompleted ? (
+                      <span className="text-green-500 text-xs font-medium">
+                        Completed
+                      </span>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <img
+                          onClick={() => handleCancelAppointment(item?._id)}
+                          src={assets.cancel_icon}
+                          alt="cancel_icon"
+                          className="w-10 cursor-pointer"
+                        />
+                        <img
+                          onClick={() => handleCompleteAppointment(item?._id)}
+                          src={assets.tick_icon}
+                          alt="tick_icon"
+                          className="w-10 cursor-pointer"
+                        />
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 };
 
-export default DoctorDashboard;
+export default DoctorAppointments;
