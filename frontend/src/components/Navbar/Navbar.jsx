@@ -5,13 +5,14 @@ import { AppContext } from "../../context/AppContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
-
+  const adminURL = import.meta.env.VITE_ADMIN_URL;
   const [showMenu, setShowMenu] = useState(false);
   const { token, setToken, userData } = useContext(AppContext);
 
   const logout = () => {
     setToken(false);
     localStorage.removeItem("token");
+    navigate("/");
   };
 
   return (
@@ -39,7 +40,12 @@ const Navbar = () => {
           <li className="py-2">CONTACT</li>
           <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
-        <button className="border rounded-2xl px-5 py-1">Admin Panel</button>
+        <button
+          onClick={() => window.open(adminURL, "_blank")}
+          className="border rounded-2xl px-5 py-1"
+        >
+          Admin Panel
+        </button>
       </ul>
       <div className="flex items-center gap-4">
         {token && userData ? (
@@ -118,7 +124,12 @@ const Navbar = () => {
             <NavLink to="/contact" onClick={() => setShowMenu(false)}>
               <p className="px-4 py-2 rounded inline-block">CONTACT</p>
             </NavLink>
-            <button onClick={() => setShowMenu(false)}>
+            <button
+              onClick={() => {
+                setShowMenu(false);
+                window.open(adminURL, "_blank");
+              }}
+            >
               <p className="px-4 py-2 rounded inline-block">Admin Panel</p>
             </button>
           </ul>
