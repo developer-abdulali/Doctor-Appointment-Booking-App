@@ -1,22 +1,22 @@
 import mongoose from "mongoose";
 
-const connectDB = async () => {
-  try {
-    // Listening for connection events
-    mongoose.connection.on("connected", () =>
-      console.log("Database connected")
-    );
-    mongoose.connection.on("error", (err) =>
-      console.error("Database connection error:", err)
-    );
+let isConnected = false;
 
-    // Use the environment variable directly and specify the database name
+const connectDB = async () => {
+  if (isConnected) {
+    return;
+  }
+
+  try {
     await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: "prescripto", // Specify the database name here
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-  } catch (error) {
-    console.error("Database connection failed:", error.message);
-    process.exit(1); // Exit the process if connection fails
+    isConnected = true;
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("Error connecting to MongoDB", err);
+    throw new Error("Database connection failed");
   }
 };
 
