@@ -4,7 +4,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon api/server.js"
+    "dev": "nodemon api/index.js"
   },
   "author": "",
   "license": "ISC",
