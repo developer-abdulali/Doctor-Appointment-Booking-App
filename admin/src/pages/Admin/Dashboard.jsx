@@ -22,8 +22,6 @@ const Dashboard = () => {
   return (
     dashboardData && (
       <section className="p-5 w-full">
-        {/* Responsive Grid for the Dashboard Cards */}
-        {/* <div className="flex flex-wrap"> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
           <div
             onClick={() => navigate("/doctor-list")}

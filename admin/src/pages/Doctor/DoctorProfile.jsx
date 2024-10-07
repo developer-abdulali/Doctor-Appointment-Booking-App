@@ -4,7 +4,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const DoctorProfile = () => {
-  // const navigate = useNavigate();
   const {
     dToken,
     slotDateFormat,
@@ -50,8 +49,8 @@ const DoctorProfile = () => {
   return (
     profileData && (
       <section>
-        <div className="flex flex-col gap-4 m-5">
-          <div>
+        <div className="flex flex-col gap-4 sm:m-5">
+          <div className="m-5 sm:m-0">
             <img
               src={profileData?.image}
               alt="doctor img"

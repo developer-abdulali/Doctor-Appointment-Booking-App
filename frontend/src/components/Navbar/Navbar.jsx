@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(false);
-  const { token, setToken, userData } = useContext(AppContext); // Fixed destructuring
+  const { token, setToken, userData } = useContext(AppContext);
 
   const logout = () => {
     setToken(false);
@@ -39,6 +39,7 @@ const Navbar = () => {
           <li className="py-2">CONTACT</li>
           <hr className="border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden" />
         </NavLink>
+        <button className="border rounded-2xl px-5 py-1">Admin Panel</button>
       </ul>
       <div className="flex items-center gap-4">
         {token && userData ? (
@@ -117,6 +118,9 @@ const Navbar = () => {
             <NavLink to="/contact" onClick={() => setShowMenu(false)}>
               <p className="px-4 py-2 rounded inline-block">CONTACT</p>
             </NavLink>
+            <button onClick={() => setShowMenu(false)}>
+              <p className="px-4 py-2 rounded inline-block">Admin Panel</p>
+            </button>
           </ul>
         </div>
       </div>

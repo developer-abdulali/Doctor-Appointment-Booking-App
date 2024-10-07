@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AdminContext } from "../../context/AdminContext";
 import { assets } from "../../assets/assets";
 import { DoctorContext } from "../../context/DoctorContext";
-import { HiMenuAlt3, HiX } from "react-icons/hi"; // Import menu and close icons
+import { HiMenuAlt3 } from "react-icons/hi";
 
 const Navbar = ({ toggleSidebar }) => {
   const { setAToken, aToken } = useContext(AdminContext);

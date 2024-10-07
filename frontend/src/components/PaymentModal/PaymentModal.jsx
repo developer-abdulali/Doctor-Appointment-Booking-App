@@ -81,7 +81,7 @@ const PaymentModal = ({
                     className="mr-2"
                   />
                   <img
-                    src={assets.jazzcash_icon}
+                    src={assets.Jazzcash}
                     alt="JazzCash Icon"
                     className="w-9"
                   />
@@ -140,7 +140,7 @@ const PaymentModal = ({
                     className="mr-2"
                   />
                   <img
-                    src={assets.easypaisa_icon}
+                    src={assets.Easypaisa}
                     alt="Easypaisa Icon"
                     className="w-9"
                   />

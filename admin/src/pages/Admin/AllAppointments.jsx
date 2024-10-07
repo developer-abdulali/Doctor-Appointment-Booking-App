@@ -17,7 +17,7 @@ const AllAppointments = () => {
 
   return (
     <section className="w-full p-5">
-      <p className="mb-3 text-lg font-medium">All Appointments</p>
+      <p className="mb-3 text-xl font-medium">All Appointments</p>
       <div className="bg-white border rounded text-sm overflow-y-scroll">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -47,7 +47,7 @@ const AllAppointments = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {appointments?.reverse()?.map((item, i) => (
-              <tr key={i} className="hover:bg-gray-50">
+              <tr key={i} className="hover:bg-gray-50 ">
                 <td className="px-6 py-4 whitespace-nowrap">{i + 1}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">

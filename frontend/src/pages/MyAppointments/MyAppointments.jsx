@@ -90,16 +90,13 @@ const MyAppointments = () => {
         My appointments
       </p>
       {appointments?.length > 0 ? (
-        <div>
-          {appointments.map((item, i) => {
+        <>
+          {appointments?.map((item, i) => {
             const address = item?.docData?.address;
 
             return (
-              <div className="border-b">
-                <div
-                  key={item?._id}
-                  className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 "
-                >
+              <div key={item?._id} className="border-b">
+                <div className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 ">
                   <img
                     src={item?.docData?.image}
                     alt="img"
@@ -157,7 +154,7 @@ const MyAppointments = () => {
                     )}
                   </div>
                 </div>
-                {/* acction buttons for small screen */}
+                {/* action buttons for small screen */}
                 <div className="md:hidden flex gap-2 mb-2">
                   {item.paymentMethod === "Cash" ? (
                     <p className="text-sm text-yellow-600 text-center sm:min-w-48 py-2 border rounded">
@@ -195,7 +192,7 @@ const MyAppointments = () => {
               </div>
             );
           })}
-        </div>
+        </>
       ) : (
         <p className="text-center mt-6 text-zinc-500">No appointment booked</p>
       )}

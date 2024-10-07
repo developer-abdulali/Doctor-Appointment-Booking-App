@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
 import { assets } from "../../assets/assets";
 
-const DoctorAppointments = () => {
+const DoctorDashboard = () => {
   const {
     dToken,
     appointments,
@@ -82,7 +82,7 @@ const DoctorAppointments = () => {
         </div>
       </div>
 
-      <p className="mb-3 text-xl font-semibold">All Appointments</p>
+      <p className="my-3 text-xl font-semibold">All Appointments</p>
       <div className="bg-white border rounded shadow-sm overflow-x-auto">
         {/* Table header */}
         <table className="min-w-full">
@@ -109,7 +109,7 @@ const DoctorAppointments = () => {
             ) : (
               appointments.reverse().map((item, i) => (
                 <tr key={i} className="hover:bg-gray-50">
-                  <td className="py-3 px-6 hidden sm:table-cell">{i + 1}</td>
+                  <td className="py-3 px-6">{i + 1}</td>
                   <td className="py-3 px-6">
                     <div className="flex items-center gap-2">
                       <img
@@ -120,7 +120,7 @@ const DoctorAppointments = () => {
                       <span>{item?.userData?.name}</span>
                     </div>
                   </td>
-                  <td className="py-3 px-6 hidden sm:table-cell">
+                  <td className="py-3 px-6">
                     {calculateAge(item?.userData?.dob)}
                   </td>
                   <td className="py-3 px-6">
@@ -155,13 +155,13 @@ const DoctorAppointments = () => {
                           onClick={() => handleCancelAppointment(item?._id)}
                           src={assets.cancel_icon}
                           alt="cancel_icon"
-                          className="w-10 cursor-pointer"
+                          className="w-6 cursor-pointer"
                         />
                         <img
                           onClick={() => handleCompleteAppointment(item?._id)}
                           src={assets.tick_icon}
                           alt="tick_icon"
-                          className="w-10 cursor-pointer"
+                          className="w-6 cursor-pointer"
                         />
                       </div>
                     )}
@@ -176,4 +176,4 @@ const DoctorAppointments = () => {
   );
 };
 
-export default DoctorAppointments;
+export default DoctorDashboard;
