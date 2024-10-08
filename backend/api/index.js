@@ -6,6 +6,7 @@ import connectCloudinary from "../config/cloudinary.js";
 import adminRouter from "../routes/adminRoute.js";
 import doctorRouter from "../routes/doctorRoute.js";
 import userRouter from "../routes/userRoute.js";
+
 dotenv.config();
 
 // app config
@@ -38,15 +39,27 @@ const corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 
+// Log request and response headers for debugging
+app.use((req, res, next) => {
+  console.log('Request Headers:', req.headers);
+  res.on('finish', () => {
+    console.log('Response Headers:', res.getHeaders());
+  });
+  next();
+});
+
 // api endpoints
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
 
 app.get("/", (req, res) => {
-  res.send("api working");
+  res.send("Doctor Book App Server is working");
 });
 
+// Preflight requests handling
+app.options('*', cors(corsOptions)); // Handle preflight requests
+
 app.listen(port, () => {
-  console.log(`server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
