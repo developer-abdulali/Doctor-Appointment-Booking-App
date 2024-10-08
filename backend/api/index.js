@@ -21,10 +21,10 @@ const corsOptions = {
     "http://localhost:5173",
     "http://localhost:5174",
     "https://doctor-appointment-booking-system-theta.vercel.app",
-    "https://doctor-appointment-booking-app-gipw.vercel.app/",
-    "https://doctor-appointment-booking-app-nu.vercel.app/",
+    "https://doctor-appointment-booking-app-gipw.vercel.app",
+    "https://doctor-appointment-booking-app-nu.vercel.app",
   ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Ensure OPTIONS is included
   allowedHeaders: [
     "Content-Type",
     "Authorization",
@@ -36,8 +36,8 @@ const corsOptions = {
 };
 
 // middleware
+app.use(cors(corsOptions)); // Use CORS middleware before your routes
 app.use(express.json());
-app.use(cors(corsOptions));
 
 // Log request and response headers for debugging
 app.use((req, res, next) => {
@@ -54,7 +54,7 @@ app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
 
 app.get("/", (req, res) => {
-  res.send("Doctor Book App Server is working");
+  res.send("API working");
 });
 
 // Preflight requests handling
