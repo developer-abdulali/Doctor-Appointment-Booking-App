@@ -21,6 +21,7 @@ const corsOptions = {
     "http://localhost:5174",
     "https://doctor-appointment-booking-system-theta.vercel.app",
     "https://doctor-appointment-booking-app-gipw.vercel.app/",
+    "https://doctor-appointment-booking-app-nu.vercel.app/",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: [
