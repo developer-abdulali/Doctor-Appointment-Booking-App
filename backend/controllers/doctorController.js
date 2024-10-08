@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import doctorModel from "../models/doctorModel.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import appointmentModel from "../models/appointmentModel.js";
 
 // change doctor availability
