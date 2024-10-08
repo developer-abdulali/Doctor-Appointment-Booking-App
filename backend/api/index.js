@@ -22,7 +22,7 @@ const corsOptions = {
     "https://doctor-appointment-booking-app-gipw.vercel.app/",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
   credentials: true,
 };
 
