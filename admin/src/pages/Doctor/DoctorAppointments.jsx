@@ -36,52 +36,6 @@ const DoctorDashboard = () => {
 
   return (
     <section className="w-full p-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-        <div
-          onClick={() => navigate("/doctor-list")}
-          className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full"
-        >
-          <img src={assets.earning_icon} alt="doctor_icon" className="w-14" />
-          <div>
-            <p className="text-xl font-semibold text-gray-600">
-              {dashboardData?.earnings}
-            </p>
-            <p className="text-gray-400">Earnings</p>
-          </div>
-        </div>
-
-        <div
-          onClick={() => navigate("/all-appointments")}
-          className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full"
-        >
-          <img
-            src={assets.appointments_icon}
-            alt="appointments_icon"
-            className="w-14"
-          />
-          <div>
-            <p className="text-xl font-semibold text-gray-600">
-              {dashboardData?.appointments}
-            </p>
-            <p className="text-gray-400">Appointments</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 bg-white p-4 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all w-full">
-          <img
-            src={assets.patients_icon}
-            alt="patients_icon"
-            className="w-14"
-          />
-          <div>
-            <p className="text-xl font-semibold text-gray-600">
-              {dashboardData?.patients}
-            </p>
-            <p className="text-gray-400">Patients</p>
-          </div>
-        </div>
-      </div>
-
       <p className="mb-3 text-xl font-medium">All Appointments</p>
       <div className="bg-white border rounded text-sm overflow-y-scroll">
         <table className="min-w-full divide-y divide-gray-200">

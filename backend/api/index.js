@@ -18,11 +18,18 @@ connectCloudinary();
 const corsOptions = {
   origin: [
     "http://localhost:5173",
+    "http://localhost:5174",
     "https://doctor-appointment-booking-system-theta.vercel.app",
     "https://doctor-appointment-booking-app-gipw.vercel.app/",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "token"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "token",
+    "atoken",
+    "dtoken",
+  ],
   credentials: true,
 };
 
