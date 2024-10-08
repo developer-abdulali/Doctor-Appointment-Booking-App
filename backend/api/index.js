@@ -14,9 +14,20 @@ const port = process.env.PORT || 3000;
 connectDB();
 connectCloudinary();
 
+// CORS options
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://doctor-appointment-booking-system-theta.vercel.app",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
 // middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // api endpoints
 app.use("/api/admin", adminRouter);
