@@ -4,6 +4,7 @@ import { AppContext } from "../../context/AppContext";
 import { assets } from "../../../public/assets/assets";
 import RelatedDoctors from "../../components/RelatedDoctors/RelatedDoctors";
 import { toast } from "react-toastify";
+import { FaSpinner } from "react-icons/fa";
 import axios from "axios";
 
 const Appointment = () => {
@@ -12,6 +13,8 @@ const Appointment = () => {
   const { docId } = useParams();
   const { doctors, currencySymbol, getDoctorData, token, backendURL } =
     useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+
   const [doctorInfo, setDoctorInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
@@ -98,12 +101,24 @@ const Appointment = () => {
   };
 
   // book appointment function
+  // book appointment function
   const bookAppointment = async () => {
     if (!token) {
       toast.warn("Please login to book an appointment.");
       navigate("/login");
       return;
     }
+
+    // Check if the date and time are selected
+    if (slotIndex < 0 || !slotTime) {
+      toast.warn("Please select a date and time before booking.");
+      return;
+    }
+
+    // Set paymentMethod to null
+    const paymentMethod = null;
+
+    setLoading(true);
 
     try {
       const date = docSlots[slotIndex][0].datetime;
@@ -115,8 +130,8 @@ const Appointment = () => {
 
       // Awaiting the axios post request
       const res = await axios.post(
-        backendURL + "/user/book-appointment",
-        { docId, slotDate, slotTime },
+        `${backendURL}/user/book-appointment`,
+        { docId, slotDate, slotTime, paymentMethod },
         { headers: { token } }
       );
 
@@ -130,6 +145,8 @@ const Appointment = () => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to book an appointment. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -146,13 +163,13 @@ const Appointment = () => {
       <section className="">
         {/* doctor details */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <div>
-            <img
-              src={doctorInfo.image}
-              alt="doctor img"
-              className="bg-primary w-full sm:max-w-72 rounded-lg"
-            />
-          </div>
+          {/* <div> */}
+          <img
+            src={doctorInfo.image}
+            alt="doctor img"
+            className="bg-primary w-full sm:max-w-72 rounded-lg"
+          />
+          {/* </div> */}
           {/* doctor info: name, degree,experience etc */}
           <div className="flex-1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0">
             <p className="flex items-center gap-2 text-2xl font-medium text-gray-900">
@@ -196,8 +213,8 @@ const Appointment = () => {
           <div className="sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700">
             <p>Booking slots</p>
             <div className="flex items-center gap-3 w-full overflow-x-scroll mt-4">
-              {docSlots.length &&
-                docSlots.map((item, i) => (
+              {docSlots?.length &&
+                docSlots?.map((item, i) => (
                   <div
                     key={i}
                     onClick={() => setSlotIndex(i)}
@@ -238,9 +255,18 @@ const Appointment = () => {
             {/* book appointment btn */}
             <button
               onClick={bookAppointment}
-              className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 hover:bg-primary/90 duration-200 transition-all"
+              className={`bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 hover:bg-primary/90 duration-200 transition-all flex justify-center items-center ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={loading}
             >
-              Book an appointment
+              {loading ? (
+                <div className="px-14 py-1">
+                  <FaSpinner className="animate-spin mr-2" />
+                </div>
+              ) : (
+                "Book an appointment"
+              )}
             </button>
           </div>
         )}

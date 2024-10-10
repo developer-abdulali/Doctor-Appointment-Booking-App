@@ -86,7 +86,7 @@ export const loginUser = async (req, res) => {
     // check if email already exists
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "User doest not" });
+      return res.json({ success: false, message: "User not found" });
     }
 
     // validate the password
@@ -183,11 +183,11 @@ export const updateUserProfile = async (req, res) => {
 // book the appointment
 export const bookAppointment = async (req, res) => {
   try {
-    const { userId, docId, slotDate, slotTime } = req.body;
+    const { userId, docId, slotDate, slotTime, paymentMethod } = req.body;
 
     const docData = await doctorModel.findById(docId).select("-password");
 
-    // check if doctor is available
+    // Check if doctor is available
     if (!docData.available) {
       return res.json({
         success: false,
@@ -197,7 +197,7 @@ export const bookAppointment = async (req, res) => {
 
     let slots_booked = docData.slots_booked;
 
-    // checking for slots availability
+    // Checking for slots availability
     if (slots_booked[slotDate]) {
       if (slots_booked[slotDate].includes(slotTime)) {
         return res.json({
@@ -225,12 +225,13 @@ export const bookAppointment = async (req, res) => {
       slotTime,
       slotDate,
       date: Date.now(),
+      paymentMethod, // Add paymentMethod to appointment data
     };
 
-    const newAppointment = await new appointmentModel(appointmentData);
-    newAppointment.save();
+    const newAppointment = new appointmentModel(appointmentData);
+    await newAppointment.save(); // Await the save operation
 
-    // update doctor slots_booked field
+    // Update doctor slots_booked field
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
 
     res.json({ success: true, message: "Appointment booked successfully" });
@@ -239,6 +240,65 @@ export const bookAppointment = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+// export const bookAppointment = async (req, res) => {
+//   try {
+//     const { userId, docId, slotDate, slotTime } = req.body;
+
+//     const docData = await doctorModel.findById(docId).select("-password");
+
+//     // check if doctor is available
+//     if (!docData.available) {
+//       return res.json({
+//         success: false,
+//         message: "Doctor is not available at this time",
+//       });
+//     }
+
+//     let slots_booked = docData.slots_booked;
+
+//     // checking for slots availability
+//     if (slots_booked[slotDate]) {
+//       if (slots_booked[slotDate].includes(slotTime)) {
+//         return res.json({
+//           success: false,
+//           message: "Slot not available",
+//         });
+//       } else {
+//         slots_booked[slotDate].push(slotTime);
+//       }
+//     } else {
+//       slots_booked[slotDate] = [];
+//       slots_booked[slotDate].push(slotTime);
+//     }
+
+//     const userData = await userModel.findById(userId).select("-password");
+
+//     delete docData.slots_booked;
+
+//     const appointmentData = {
+//       userId,
+//       docId,
+//       userData,
+//       docData,
+//       amount: docData.fees,
+//       slotTime,
+//       slotDate,
+//       date: Date.now(),
+//     };
+
+//     const newAppointment = await new appointmentModel(appointmentData);
+//     newAppointment.save();
+
+//     // update doctor slots_booked field
+//     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
+
+//     res.json({ success: true, message: "Appointment booked successfully" });
+//   } catch (error) {
+//     console.log(error);
+//     return res.json({ success: false, message: error.message });
+//   }
+// };
 
 // get all booking appointments
 export const getAllBookedAppointments = async (req, res) => {
