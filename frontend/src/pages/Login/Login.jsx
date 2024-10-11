@@ -19,7 +19,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading when form is submitted
+    setLoading(true);
     try {
       if (state === "Signup") {
         const { data } = await axios.post(backendURL + "/user/register", {
@@ -50,7 +50,7 @@ const Login = () => {
     } catch (error) {
       toast.error(error?.response?.data?.message || "An error occurred");
     } finally {
-      setLoading(false); // End loading after process completes
+      setLoading(false);
     }
   };
 

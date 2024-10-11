@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { DoctorContext } from "../../context/DoctorContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 
 const Login = () => {
   const [state, setState] = useState("Admin");
@@ -99,11 +100,7 @@ const Login = () => {
           disabled={loading}
           className="bg-primary w-full py-3 rounded-md text-white font-semibold flex items-center justify-center transition-all hover:bg-primary/90"
         >
-          {loading ? (
-            <span className="loader border-2 border-white border-t-transparent rounded-full w-5 h-5 mr-2"></span>
-          ) : (
-            "Login"
-          )}
+          {loading ? <FaSpinner className="animate-spin" /> : "Login"}
         </button>
         {state === "Admin" ? (
           <p className="text-sm text-gray-600 text-center">

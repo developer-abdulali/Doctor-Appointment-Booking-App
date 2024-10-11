@@ -22,11 +22,11 @@ const AddDoctor = () => {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); // Track loading state
+  const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when the process starts
+    setLoading(true);
 
     try {
       if (!docImg) {
@@ -253,7 +253,7 @@ const AddDoctor = () => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className={`mt-8 px-4 py-2 rounded bg-blue-500 text-white ${
+            className={`mt-8 px-4 py-2 rounded bg-primary text-white ${
               loading
                 ? "opacity-50 cursor-not-allowed"
                 : "transition-all hover:duration-500 hover:bg-primary/90"
