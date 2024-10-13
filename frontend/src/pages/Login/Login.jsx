@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 
 const Login = () => {
   const [state, setState] = useState("Login");
@@ -11,12 +12,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const { token, setToken, backendURL } = useContext(AppContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (state === "Signup") {
         const { data } = await axios.post(backendURL + "/user/register", {
@@ -46,6 +49,8 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,6 +78,7 @@ const Login = () => {
               type="text"
               name="name"
               value={name}
+              required
               onChange={(e) => setName(e.target.value)}
               className="border border-zinc-300 rounded w-full p-2 mt-1"
             />
@@ -84,6 +90,7 @@ const Login = () => {
             type="email"
             name="email"
             value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
             className="border border-zinc-300 rounded w-full p-2 mt-1"
           />
@@ -94,6 +101,7 @@ const Login = () => {
             type={showPassword ? "text" : "password"}
             name="password"
             value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
             className="border border-zinc-300 rounded w-full p-2 mt-1"
           />
@@ -106,9 +114,18 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="bg-primary text-white w-full py-2 rounded-md text-base"
+          className={`bg-primary text-white w-full py-2 rounded-md text-base flex justify-center items-center ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={loading}
         >
-          {state === "Signup" ? "Create Account" : "Login"}
+          {loading ? (
+            <FaSpinner className="animate-spin h-6" />
+          ) : state === "Signup" ? (
+            "Create Account"
+          ) : (
+            "Login"
+          )}
         </button>
         {state === "Signup" ? (
           <p>

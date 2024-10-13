@@ -36,7 +36,7 @@ const App = () => {
   };
 
   return aToken || dToken ? (
-    <div className="bg-[#F8F9FD] overflow-hidden">
+    <div className="bg-[#F8F9FD] h-screen overflow-hidden">
       <Navbar toggleSidebar={toggleSidebar} />
       <div className="sm:flex">
         <Sidebar

@@ -154,7 +154,6 @@ const MyProfile = () => {
                     <input
                       type="text"
                       value={userData?.address?.line1}
-                      placeholder="Choose address"
                       onChange={(e) =>
                         setUserData((prev) => ({
                           ...prev,

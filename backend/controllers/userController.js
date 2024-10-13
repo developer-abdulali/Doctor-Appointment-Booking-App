@@ -1,5 +1,5 @@
 import validator from "validator";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
@@ -86,7 +86,7 @@ export const loginUser = async (req, res) => {
     // check if email already exists
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "User doest not" });
+      return res.json({ success: false, message: "User not found" });
     }
 
     // validate the password
@@ -198,11 +198,11 @@ export const updateUserProfile = async (req, res) => {
 // book the appointment
 export const bookAppointment = async (req, res) => {
   try {
-    const { userId, docId, slotDate, slotTime } = req.body;
+    const { userId, docId, slotDate, slotTime, paymentMethod } = req.body;
 
     const docData = await doctorModel.findById(docId).select("-password");
 
-    // check if doctor is available
+    // Check if doctor is available
     if (!docData.available) {
       return res.json({
         success: false,
@@ -212,7 +212,7 @@ export const bookAppointment = async (req, res) => {
 
     let slots_booked = docData.slots_booked;
 
-    // checking for slots availability
+    // Checking for slots availability
     if (slots_booked[slotDate]) {
       if (slots_booked[slotDate].includes(slotTime)) {
         return res.json({
@@ -249,13 +249,14 @@ export const bookAppointment = async (req, res) => {
       slotTime,
       slotDate,
       date: Date.now(),
+      paymentMethod, // Add paymentMethod to appointment data
     };
 
     // Save the new appointment
     const newAppointment = new appointmentModel(appointmentData);
     await newAppointment.save();
 
-    // update doctor slots_booked field
+    // Update doctor slots_booked field
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
 
     res.json({ success: true, message: "Appointment booked successfully" });

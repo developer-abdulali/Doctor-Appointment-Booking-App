@@ -9,13 +9,14 @@ const appointmentSchema = new mongoose.Schema({
   docData: { type: Object, required: true },
   amount: { type: Number, required: true },
   date: { type: Number, required: true },
+
   cancelled: { type: Boolean, default: false },
   payment: { type: Boolean, default: false },
   isCompleted: { type: Boolean, default: false },
 
   paymentMethod: {
     type: String,
-    enum: ["JazzCash", "Easypaisa", "Cash"],
+    enum: ["JazzCash", "Easypaisa", "Cash", null],
     default: null,
   },
   paymentProof: { type: String, default: null },
