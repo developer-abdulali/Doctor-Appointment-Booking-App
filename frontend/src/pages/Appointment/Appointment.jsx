@@ -11,10 +11,14 @@ const Appointment = () => {
   const navigate = useNavigate();
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const { docId } = useParams();
-  const { doctors, currencySymbol, getDoctorData, token, backendURL } =
-    useContext(AppContext);
-  const [loading, setLoading] = useState(false);
-
+  const {
+    userData,
+    doctors,
+    currencySymbol,
+    getDoctorData,
+    token,
+    backendURL,
+  } = useContext(AppContext);
   const [doctorInfo, setDoctorInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
