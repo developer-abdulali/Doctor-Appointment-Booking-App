@@ -3,14 +3,17 @@ import { AppContext } from "../../context/AppContext";
 import { assets } from "../../../public/assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FaSpinner } from "react-icons/fa";
 
 const MyProfile = () => {
   const { userData, setUserData, token, backendURL, getUserProfileData } =
     useContext(AppContext);
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const updateUserProfileData = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("userId", userData?._id);
@@ -23,9 +26,14 @@ const MyProfile = () => {
       if (image) formData.append("image", image);
 
       const { data } = await axios.post(
-        backendURL + "/user/update-profile",
+        `${backendURL}/user/update-profile`,
         formData,
-        { headers: { token } }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // token
+          },
+        }
       );
 
       if (data.success) {
@@ -37,7 +45,10 @@ const MyProfile = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Profile update failed:", error);
+      toast.error("An error occurred while updating your profile.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,6 +91,7 @@ const MyProfile = () => {
             <input
               type="text"
               value={userData?.name}
+              placeholder="Choose name"
               onChange={(e) =>
                 setUserData((prev) => ({ ...prev, name: e.target.value }))
               }
@@ -102,6 +114,7 @@ const MyProfile = () => {
                   <input
                     type="email"
                     value={userData?.email}
+                    placeholder="Choose email"
                     onChange={(e) =>
                       setUserData((prev) => ({
                         ...prev,
@@ -120,6 +133,7 @@ const MyProfile = () => {
                   <input
                     type="text"
                     value={userData?.phone}
+                    placeholder="Choose phone number"
                     onChange={(e) =>
                       setUserData((prev) => ({
                         ...prev,
@@ -132,31 +146,34 @@ const MyProfile = () => {
                   <p className="text-blue-400">{userData?.phone}</p>
                 )}
               </div>
+
               <div>
                 <p className="font-medium">Address:</p>
                 {isEdit ? (
-                  <div>
+                  <div className="flex flex-col">
                     <input
                       type="text"
                       value={userData?.address?.line1}
+                      placeholder="Choose address"
                       onChange={(e) =>
                         setUserData((prev) => ({
                           ...prev,
                           address: { ...prev.address, line1: e.target.value },
                         }))
                       }
-                      className="bg-gray-50 w-full p-2 mt-1 border border-gray-300 rounded"
+                      className="bg-gray-50 p-2 w-full sm:w-[28rem] mt-1 border border-gray-300 rounded"
                     />
                     <input
                       type="text"
                       value={userData?.address?.line2}
+                      placeholder="city, state or country"
                       onChange={(e) =>
                         setUserData((prev) => ({
                           ...prev,
                           address: { ...prev.address, line2: e.target.value },
                         }))
                       }
-                      className="bg-gray-50 w-full p-2 mt-1 border border-gray-300 rounded"
+                      className="bg-gray-50 p-2 w-full sm:w-[28rem] mt-1 border border-gray-300 rounded"
                     />
                   </div>
                 ) : (
@@ -175,22 +192,26 @@ const MyProfile = () => {
                 <p className="font-medium">Gender</p>
                 {isEdit ? (
                   <select
-                    value={userData?.gender}
+                    value={userData?.gender || ""}
                     onChange={(e) =>
                       setUserData((prev) => ({
                         ...prev,
                         gender: e.target.value,
                       }))
                     }
-                    className="max-w-20 bg-gray-100 w-full p-2 mt-1 border border-gray-300 rounded"
+                    className="bg-gray-100 w-full p-2 mt-1 border border-gray-300 rounded"
                   >
+                    <option value="">Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
                 ) : (
-                  <p className="text-gray-400">{userData?.gender}</p>
+                  <p className="text-gray-400">
+                    {userData?.gender || "Not specified"}
+                  </p>
                 )}
               </div>
+
               <div>
                 <p className="font-medium">Birthday</p>
                 {isEdit ? (
@@ -200,7 +221,7 @@ const MyProfile = () => {
                     onChange={(e) =>
                       setUserData((prev) => ({ ...prev, dob: e.target.value }))
                     }
-                    className="max-w-20 bg-gray-100 w-full p-2 mt-1 border border-gray-300 rounded"
+                    className="bg-gray-100 w-full p-2 mt-1 border border-gray-300 rounded"
                   />
                 ) : (
                   <p className="text-gray-400">{userData?.dob}</p>
@@ -208,13 +229,26 @@ const MyProfile = () => {
               </div>
             </div>
           </div>
+
+          {/* save information btn */}
           <div className="mt-10">
             {isEdit ? (
               <button
                 onClick={updateUserProfileData}
+                profile
+                data
                 className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all duration-300"
+                disabled={loading}
               >
-                Save Information
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <FaSpinner className="animate-spin mr-2" />{" "}
+                    {/* Spinner icon */}
+                    Loading...
+                  </span>
+                ) : (
+                  "Save Information"
+                )}
               </button>
             ) : (
               <button

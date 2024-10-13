@@ -124,6 +124,11 @@ const Navbar = () => {
             <NavLink to="/contact" onClick={() => setShowMenu(false)}>
               <p className="px-4 py-2 rounded inline-block">CONTACT</p>
             </NavLink>
+            {!token && (
+              <NavLink to="/login" onClick={() => setShowMenu(false)}>
+                <p className="px-4 py-2 rounded inline-block">LOGIN</p>
+              </NavLink>
+            )}
             <button
               onClick={() => {
                 setShowMenu(false);

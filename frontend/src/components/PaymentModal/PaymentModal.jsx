@@ -36,7 +36,8 @@ const PaymentModal = ({
         formData,
         {
           headers: {
-            token,
+            Authorization: `Bearer ${token}`,
+            // token,
             "Content-Type": "multipart/form-data",
           },
         }

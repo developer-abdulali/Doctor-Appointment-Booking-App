@@ -10,12 +10,20 @@ const Appointment = () => {
   const navigate = useNavigate();
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const { docId } = useParams();
-  const { doctors, currencySymbol, getDoctorData, token, backendURL } =
-    useContext(AppContext);
+  const {
+    userData,
+    doctors,
+    currencySymbol,
+    getDoctorData,
+    token,
+    backendURL,
+  } = useContext(AppContext);
   const [doctorInfo, setDoctorInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
+
+  // console.log("USER DATA", userData._id);
 
   const fetchDocInfo = () => {
     const doctor = doctors.find((doc) => doc._id === docId);
@@ -105,6 +113,10 @@ const Appointment = () => {
       return;
     }
 
+    const userId = userData._id;
+
+    // console.log("USER ID", userId);
+
     try {
       const date = docSlots[slotIndex][0].datetime;
       let day = date.getDate();
@@ -116,10 +128,15 @@ const Appointment = () => {
       // Awaiting the axios post request
       const res = await axios.post(
         backendURL + "/user/book-appointment",
-        { docId, slotDate, slotTime },
-        { headers: { token } }
+        { userId, docId, slotDate, slotTime },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
+      // console.log("RESPONSE", res);
       if (res.data.success) {
         toast.success(res.data.message);
         getDoctorData();
@@ -132,6 +149,47 @@ const Appointment = () => {
       toast.error("Failed to book an appointment. Please try again.");
     }
   };
+
+  // const bookAppointment = async () => {
+  //   if (!token) {
+  //     toast.warn("Please login to book an appointment.");
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   try {
+  //     const date = docSlots[slotIndex][0].datetime;
+  //     let day = date.getDate();
+  //     let month = date.getMonth() + 1;
+  //     let year = date.getFullYear();
+
+  //     const slotDate = `${day}_${month}_${year}`;
+
+  //     // Awaiting the axios post request
+  //     const res = await axios.post(
+  //       backendURL + "/user/book-appointment",
+  //       { docId, slotDate, slotTime },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //       // { headers: { token } }
+  //     );
+
+  //     console.log("RESPONSE", res);
+  //     if (res.data.success) {
+  //       toast.success(res.data.message);
+  //       getDoctorData();
+  //       navigate("/my-appointments");
+  //     } else {
+  //       toast.error(res.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("Failed to book an appointment. Please try again.");
+  //   }
+  // };
 
   useEffect(() => {
     fetchDocInfo();

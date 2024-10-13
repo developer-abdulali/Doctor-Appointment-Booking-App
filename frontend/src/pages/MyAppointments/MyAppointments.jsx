@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import PaymentModal from "../../components/PaymentModal/PaymentModal";
 
 const MyAppointments = () => {
-  const { backendURL, token, getDoctorData } = useContext(AppContext);
+  const { backendURL, token, getDoctorData, userData } = useContext(AppContext);
   const [appointments, setAppointments] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
@@ -35,9 +35,15 @@ const MyAppointments = () => {
 
   const getUserAppointments = async () => {
     try {
-      const { data } = await axios.get(backendURL + "/user/appointments", {
-        headers: { token },
-      });
+      const userId = userData._id;
+      const { data } = await axios.get(
+        `${backendURL}/user/appointments/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (data.success) {
         setAppointments(data.appointments.reverse());
@@ -49,14 +55,26 @@ const MyAppointments = () => {
   };
 
   const cancelBookedAppointment = async (appointmentId) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to cancel this appointment?"
+    );
+    if (!isConfirmed) {
+      return;
+    }
+
     try {
+      const userId = userData._id;
+
       const { data } = await axios.post(
         backendURL + "/user/cancel-appointment",
-        { appointmentId },
+        { userId, appointmentId },
         {
-          headers: { token },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+
       if (data.success) {
         toast.success(data.message);
         getUserAppointments();
@@ -83,6 +101,10 @@ const MyAppointments = () => {
     toast.success(`Payment via ${paymentMethod} successful!`);
     getUserAppointments();
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section>

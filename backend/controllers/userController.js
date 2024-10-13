@@ -113,7 +113,8 @@ export const loginUser = async (req, res) => {
 // get user profile
 export const getUserProfile = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req;
+
     const user = await userModel.findById(userId).select("-password");
     if (!user) {
       return res.json({ success: false, message: "User not found" });
@@ -124,6 +125,20 @@ export const getUserProfile = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+// export const getUserProfile = async (req, res) => {
+//   try {
+//     const { userId } = req.body;
+//     const user = await userModel.findById(userId).select("-password");
+//     if (!user) {
+//       return res.json({ success: false, message: "User not found" });
+//     }
+//     res.json({ success: true, user });
+//   } catch (error) {
+//     console.log(error);
+//     return res.json({ success: false, message: error.message });
+//   }
+// };
 
 // update user profile
 export const updateUserProfile = async (req, res) => {
@@ -212,7 +227,16 @@ export const bookAppointment = async (req, res) => {
       slots_booked[slotDate].push(slotTime);
     }
 
+    // Fetch user data
     const userData = await userModel.findById(userId).select("-password");
+
+    // Check if userData is found
+    if (!userData) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
     delete docData.slots_booked;
 
@@ -227,8 +251,9 @@ export const bookAppointment = async (req, res) => {
       date: Date.now(),
     };
 
-    const newAppointment = await new appointmentModel(appointmentData);
-    newAppointment.save();
+    // Save the new appointment
+    const newAppointment = new appointmentModel(appointmentData);
+    await newAppointment.save();
 
     // update doctor slots_booked field
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
@@ -240,18 +265,39 @@ export const bookAppointment = async (req, res) => {
   }
 };
 
-// get all booking appointments
+// Get all booked appointments
 export const getAllBookedAppointments = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
+
+    // Validate userId
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required." });
+    }
+
     const appointments = await appointmentModel.find({ userId });
 
     res.json({ success: true, appointments });
   } catch (error) {
     console.log(error);
-    return res.json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// export const getAllBookedAppointments = async (req, res) => {
+//   try {
+//     const { userId } = req.body;
+//     console.log(userId);
+//     const appointments = await appointmentModel.find({ userId });
+
+//     res.json({ success: true, appointments });
+//   } catch (error) {
+//     console.log(error);
+//     return res.json({ success: false, message: error.message });
+//   }
+// };
 
 // cancel the booked appointment
 export const cancelBookedAppointment = async (req, res) => {

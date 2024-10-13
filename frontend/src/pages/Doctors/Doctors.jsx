@@ -29,6 +29,9 @@ const Doctors = () => {
     applyFilter();
   }, [doctors, speciality]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleSpecialitySelect = (specialityName) => {
     setShowSpecialities(false); // Close specialities on selection
     if (speciality === specialityName) {
@@ -57,7 +60,7 @@ const Doctors = () => {
 
       {/* Sidebar for Specialities (Visible on larger screens and conditionally on small screens) */}
       {showSpecialities && (
-        <div className="flex flex-col gap-4 mb-4 sm:hidden">
+        <div className="flex flex-col gap-2 mb-4 sm:hidden">
           {[
             "General physician",
             "Gynecologist",

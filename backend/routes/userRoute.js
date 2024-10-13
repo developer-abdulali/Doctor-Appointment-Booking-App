@@ -25,7 +25,8 @@ userRouter.post(
   updateUserProfile
 );
 userRouter.post("/book-appointment", userAuth, bookAppointment);
-userRouter.get("/appointments", userAuth, getAllBookedAppointments);
+// userRouter.get("/appointments", userAuth, getAllBookedAppointments);
+userRouter.get("/appointments/:userId", userAuth, getAllBookedAppointments);
 userRouter.post("/cancel-appointment", userAuth, cancelBookedAppointment);
 userRouter.post(
   "/make-payment",
