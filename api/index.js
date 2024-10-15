@@ -55,8 +55,18 @@ connectDB();
 connectCloudinary();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
+// app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://doctor-appointment-booking-app-nu.vercel.app/", // Admin site
+      "https://doctor-appointment-booking-system-theta.vercel.app/", // Frontend site
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
+    credentials: true, // If your requests include credentials like cookies
+  })
+);
 
 // API endpoints
 app.use("/api/admin", adminRouter);
@@ -68,5 +78,5 @@ app.get("/", (req, res) => {
   res.send("Doctor Booking Server is working");
 });
 
-// Export the app (no need for app.listen() in Vercel)
+// Export the app for Vercel
 export default app;
