@@ -23,6 +23,7 @@ const Appointment = () => {
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // console.log("USER DATA", userData._id);
 
