@@ -16,7 +16,6 @@ const AppContextProvider = (props) => {
   const getDoctorData = async () => {
     try {
       const { data } = await axios.get(backendURL + "/doctor/doctor-list");
-      // console.log(data);
       if (data.success) {
         setDoctors(data.doctors);
       } else {
@@ -32,7 +31,6 @@ const AppContextProvider = (props) => {
       const { data } = await axios.get(backendURL + "/user/get-profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // console.log(data);
       if (data.success) {
         setUserData(data.user);
       } else {
@@ -43,23 +41,6 @@ const AppContextProvider = (props) => {
       toast.error(error.message || "Error fetching user profile");
     }
   };
-
-  // const getUserProfileData = async () => {
-  //   try {
-  //     const { data } = await axios.get(backendURL + "/user/get-profile", {
-  //       headers: { token },
-  //     });
-  //     console.log(data);
-  //     if (data.success) {
-  //       setUserData(data.user);
-  //     } else {
-  //       toast.error(error.message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     toast.error(error.message);
-  //   }
-  // };
 
   const value = {
     doctors,

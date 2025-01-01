@@ -25,8 +25,6 @@ const Appointment = () => {
   const [slotTime, setSlotTime] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // console.log("USER DATA", userData._id);
-
   const fetchDocInfo = () => {
     const doctor = doctors.find((doc) => doc._id === docId);
     setDoctorInfo(doctor);
@@ -108,7 +106,6 @@ const Appointment = () => {
   };
 
   // book appointment function
-  // book appointment function
   const bookAppointment = async () => {
     if (!token) {
       toast.warn("Please login to book an appointment.");
@@ -117,8 +114,6 @@ const Appointment = () => {
     }
 
     const userId = userData._id;
-
-    // console.log("USER ID", userId);
 
     try {
       const date = docSlots[slotIndex][0].datetime;
@@ -155,47 +150,6 @@ const Appointment = () => {
     }
   };
 
-  // const bookAppointment = async () => {
-  //   if (!token) {
-  //     toast.warn("Please login to book an appointment.");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   try {
-  //     const date = docSlots[slotIndex][0].datetime;
-  //     let day = date.getDate();
-  //     let month = date.getMonth() + 1;
-  //     let year = date.getFullYear();
-
-  //     const slotDate = `${day}_${month}_${year}`;
-
-  //     // Awaiting the axios post request
-  //     const res = await axios.post(
-  //       backendURL + "/user/book-appointment",
-  //       { docId, slotDate, slotTime },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //       // { headers: { token } }
-  //     );
-
-  //     console.log("RESPONSE", res);
-  //     if (res.data.success) {
-  //       toast.success(res.data.message);
-  //       getDoctorData();
-  //       navigate("/my-appointments");
-  //     } else {
-  //       toast.error(res.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error("Failed to book an appointment. Please try again.");
-  //   }
-  // };
-
   useEffect(() => {
     fetchDocInfo();
   }, [doctors, docId]);
@@ -206,16 +160,13 @@ const Appointment = () => {
 
   return (
     doctorInfo && (
-      <section className="">
-        {/* doctor details */}
+      <section>
         <div className="flex flex-col sm:flex-row gap-4">
-          {/* <div> */}
           <img
             src={doctorInfo.image}
             alt="doctor img"
             className="bg-primary w-full sm:max-w-72 rounded-lg"
           />
-          {/* </div> */}
           {/* doctor info: name, degree,experience etc */}
           <div className="flex-1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0">
             <p className="flex items-center gap-2 text-2xl font-medium text-gray-900">

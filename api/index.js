@@ -19,8 +19,8 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "https://doctor-appointment-booking-app-nu.vercel.app", // Admin site
-      "https://doctor-appointment-booking-system-theta.vercel.app", // Frontend site
+      process.env.FRONTEND_URL, // Frontend site
+      process.env.ADMIN_URL, // Admin site
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
@@ -35,6 +35,12 @@ app.use("/api/user", userRouter);
 // Test endpoint
 app.get("/", (req, res) => {
   res.send("Doctor Booking Server is working");
+});
+
+const port = process.env.PORT || 4000;
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
 
 // Export the app for Vercel

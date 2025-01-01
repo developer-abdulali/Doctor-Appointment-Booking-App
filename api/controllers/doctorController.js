@@ -135,7 +135,7 @@ export const markAppointmentCancel = async (req, res) => {
   }
 };
 
-// doctor  dashboard
+// doctor dashboard
 export const doctorDashboard = async (req, res) => {
   try {
     const { docId } = req.body;

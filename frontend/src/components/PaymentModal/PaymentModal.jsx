@@ -196,7 +196,7 @@ const PaymentModal = ({
                   id="cash"
                   checked={paymentMethod === "Cash"}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="mr-2"
+                  className="mr-4"
                 />
                 <span>
                   <GiMoneyStack />
@@ -207,14 +207,13 @@ const PaymentModal = ({
                 >
                   Cash
                 </label>
-                {/* <label className="text-lg text-gray-700">Cash</label> */}
               </div>
             </div>
 
             <div className="flex justify-center mt-6 space-x-4">
               <button
                 type="submit"
-                className="bg-indigo-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-700 transition duration-200"
+                className="text-stone-500 border font-semibold py-2 px-6 rounded-lg hover:bg-primary hover:text-white transition-all duration-300"
               >
                 Pay
               </button>

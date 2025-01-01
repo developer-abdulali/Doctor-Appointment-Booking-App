@@ -31,7 +31,6 @@ const MyProfile = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            // token
           },
         }
       );
