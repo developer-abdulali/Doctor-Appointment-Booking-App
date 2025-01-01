@@ -60,11 +60,11 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "https://doctor-appointment-booking-app-nu.vercel.app/", // Admin site
-      "https://doctor-appointment-booking-system-theta.vercel.app/", // Frontend site
+      "https://doctor-appointment-booking-app-nu.vercel.app", // Admin site
+      "https://doctor-appointment-booking-system-theta.vercel.app", // Frontend site
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
-    credentials: true, // If your requests include credentials like cookies
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 
