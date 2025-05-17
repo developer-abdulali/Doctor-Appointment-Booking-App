@@ -3,6 +3,8 @@ import { assets } from "../../../public/assets/assets";
 import { useContext, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 
+import { FaUser, FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const adminURL = import.meta.env.VITE_ADMIN_URL;
@@ -68,6 +70,35 @@ const Navbar = () => {
                     setShowMenu(false);
                     navigate("/my-profile");
                   }}
+                  className="hover:text-black cursor-pointer flex items-center gap-2"
+                >
+                  <FaUser /> My Profile
+                </p>
+                <p
+                  onClick={() => {
+                    setShowMenu(false);
+                    navigate("/my-appointments");
+                  }}
+                  className="hover:text-black cursor-pointer flex items-center gap-2"
+                >
+                  <FaCalendarAlt /> My Appointments
+                </p>
+                <p
+                  onClick={logout}
+                  className="hover:text-black cursor-pointer flex items-center gap-2"
+                >
+                  <FaSignOutAlt /> Logout
+                </p>
+              </div>
+            </div>
+
+            {/* <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block">
+              <div className="min-w-48 bg-stone-100 flex flex-col gap-4 p-4">
+                <p
+                  onClick={() => {
+                    setShowMenu(false);
+                    navigate("/my-profile");
+                  }}
                   className="hover:text-black cursor-pointer"
                 >
                   My Profile
@@ -85,7 +116,7 @@ const Navbar = () => {
                   Logout
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <button
